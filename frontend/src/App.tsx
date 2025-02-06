@@ -37,7 +37,7 @@ const App: React.FC = () => {
           }
         },
         anomalies: result.stats.anomalies.map(anomaly => ({
-          type: anomaly.Column.toLowerCase() as "prix" | "quantite" | "note_client",
+          type: anomaly.Column.toLowerCase() as "prix" | "quantité" | "note_client",
           value: anomaly.Value,
           expected: 'Valeur hors limites',
           rowId: anomaly.ID

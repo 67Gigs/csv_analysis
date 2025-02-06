@@ -118,12 +118,12 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, showA
                     <tr key={index}>
                       <td style={styles.td}>{
                         anomaly.type === 'prix' ? 'Prix' :
-                        anomaly.type === 'quantite' ? 'Quantité' :
+                        anomaly.type === 'quantité' ? 'Quantité' :
                         'Note client'
                       }</td>
                       <td style={styles.td}>
                         {anomaly.type === 'prix' ? `${anomaly.value}€` :
-                        anomaly.type === 'quantite' ? `${anomaly.value} unités` :
+                        anomaly.type === 'quantité' ? `${anomaly.value} unités` :
                         `${anomaly.value}/5`}
                       </td>
                       <td style={styles.td}>{anomaly.expected}</td>

@@ -21,7 +21,7 @@ export interface FileAnalysisResult {
       };
     };
     anomalies: {
-      type: 'prix' | 'quantite' | 'note_client';
+      type: 'prix' | 'quantité' | 'note_client';
       value: number;
       expected: string;
       rowId: number;

@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"name": "csv-import",
+			"uri": "azurestorageblob:/csv-import?storageAccountId=/subscriptions/48207251-47fc-446b-b8f5-6336287b9352/resourceGroups/serverlessazurefunction/providers/Microsoft.Storage/storageAccounts/serverlessazurefunction"
+		},
+		{
+			"name": "processed-results",
+			"uri": "azurestorageblob:/processed-results?storageAccountId=/subscriptions/48207251-47fc-446b-b8f5-6336287b9352/resourceGroups/serverlessazurefunction/providers/Microsoft.Storage/storageAccounts/serverlessazurefunction"
+		},
+		{
+			"name": "csv-export",
+			"uri": "azurestorageblob:/csv-export?storageAccountId=/subscriptions/48207251-47fc-446b-b8f5-6336287b9352/resourceGroups/serverlessazurefunction/providers/Microsoft.Storage/storageAccounts/serverlessazurefunction"
+		}
+	],
+	"settings": {
+		"debug.internalConsoleOptions": "neverOpen"
+	}
+}

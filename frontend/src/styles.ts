@@ -16,7 +16,8 @@ export const styles = {
     zIndex: 100,
     boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
     left: 0,
-    right: 0
+    right: 0,
+    fontFamily: 'system-ui, -apple-system, sans-serif'
   },
   navInner: {
     maxWidth: '4200px',
@@ -184,5 +185,14 @@ export const styles = {
     fontWeight: 600,
     marginBottom: '24px',
     color: '#111'
-  }
+  },
+  loadingMessage: {
+    backgroundColor: '#e0f2fe',
+    color: '#0284c7',
+    padding: '12px 16px',
+    borderRadius: '8px',
+    marginBottom: '20px',
+    border: '1px solid #bae6fd',
+    textAlign: 'center' as const
+  },
 };

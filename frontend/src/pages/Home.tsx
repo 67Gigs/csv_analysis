@@ -6,9 +6,10 @@ import { FileAnalysisResult } from '../types/types.ts';
 interface HomeProps {
   results: FileAnalysisResult[];
   onFileUpload: (file: File) => Promise<void>;
+  isLoading: boolean;
 }
 
-export const Home: React.FC<HomeProps> = ({ results, onFileUpload }) => {
+export const Home: React.FC<HomeProps> = ({ results, onFileUpload, isLoading }) => {
   return (
     <div>
       <h1>CSV File Analyzer</h1>

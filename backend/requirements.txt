@@ -3,4 +3,7 @@ flask-cors
 azure-storage-blob
 python-dotenv
 pymongo
-uvicorn
+waitress
+pandas
+requests
+datetime

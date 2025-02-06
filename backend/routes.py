@@ -76,3 +76,23 @@ def get_analysis():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@csv_routes.route('/latest-analysis', methods=['GET'])
+def get_latest():
+    try:
+        connection_string = os.getenv('MONGODB_CONNECTION_STRING')
+        client = MongoClient(connection_string)
+
+        db = client['csvdata']
+        collection = db['csvdata']
+
+        latest = collection.find_one(sort=[('timestamp', -1)])
+
+        latest['_id'] = str(latest['_id'])
+
+        client.close()
+
+        return jsonify(latest), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

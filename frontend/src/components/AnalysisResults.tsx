@@ -94,34 +94,45 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, showA
 
           <h4 style={styles.statTitle}>Détection d'anomalies</h4>
           {result.anomalies.length > 0 ? (
-            <table style={styles.table}>
-              <thead>
-                <tr>
-                  <th style={styles.th}>Type</th>
-                  <th style={styles.th}>Valeur trouvée</th>
-                  <th style={styles.th}>Plage attendue</th>
-                  <th style={styles.th}>Ligne</th>
-                </tr>
-              </thead>
-              <tbody>
-                {result.anomalies.map((anomaly, index) => (
-                  <tr key={index}>
-                    <td style={styles.td}>{
-                      anomaly.type === 'prix' ? 'Prix' :
-                      anomaly.type === 'quantite' ? 'Quantité' :
-                      'Note client'
-                    }</td>
-                    <td style={styles.td}>
-                      {anomaly.type === 'prix' ? `${anomaly.value}€` :
-                       anomaly.type === 'quantite' ? `${anomaly.value} unités` :
-                       `${anomaly.value}/5`}
-                    </td>
-                    <td style={styles.td}>{anomaly.expected}</td>
-                    <td style={styles.td}>{anomaly.rowId}</td>
+            <>
+              <div>
+                <p style={styles.statValue}>
+                  {result.anomalies.length} anomalie{result.anomalies.length > 1 ? 's' : ''} détectée{result.anomalies.length > 1 ? 's' : ''} 
+                  dont {result.anomalies.filter(anomaly => anomaly.type === 'prix').length} sur les prix, 
+                  {result.anomalies.filter(anomaly => anomaly.type === 'quantite').length} sur les quantités 
+                  et {result.anomalies.filter(anomaly => anomaly.type === 'note_client').length} sur les notes client,
+                  le nombre de ligne qui contiennent des anomalies est de {result.anomalies.map(anomaly => anomaly.rowId).filter((value, index, self) => self.indexOf(value) === index).length}
+                </p>
+              </div>
+              <table style={styles.table}>
+                <thead>
+                  <tr>
+                    <th style={styles.th}>Type</th>
+                    <th style={styles.th}>Valeur trouvée</th>
+                    <th style={styles.th}>Plage attendue</th>
+                    <th style={styles.th}>Ligne</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {result.anomalies.map((anomaly, index) => (
+                    <tr key={index}>
+                      <td style={styles.td}>{
+                        anomaly.type === 'prix' ? 'Prix' :
+                        anomaly.type === 'quantite' ? 'Quantité' :
+                        'Note client'
+                      }</td>
+                      <td style={styles.td}>
+                        {anomaly.type === 'prix' ? `${anomaly.value}€` :
+                        anomaly.type === 'quantite' ? `${anomaly.value} unités` :
+                        `${anomaly.value}/5`}
+                      </td>
+                      <td style={styles.td}>{anomaly.expected}</td>
+                      <td style={styles.td}>{anomaly.rowId}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
           ) : (
             <p style={styles.statValue}>Aucune anomalie détectée dans les données</p>
           )}

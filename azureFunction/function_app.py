@@ -94,6 +94,12 @@ def blob_trigger(myblob: func.InputStream):
     blob_client = container_client.get_blob_client(f'analysis-result-{timestamp}.json')
     blob_client.upload_blob(json.dumps(stats, indent=2), overwrite=True)
     
+    
+    # Get blob metadata to extract email
+    blob_client = blob_service_client.get_blob_client('csv-import', ''.join(myblob.name.split('/')[1:]))
+    blob_properties = blob_client.get_blob_properties()
+    receiver_email = blob_properties.metadata.get('user_email', 'noureddine.bensadok1@gmail.com')
+    
     try:
         blob_client = blob_service_client.get_blob_client('csv-import', ''.join(myblob.name.split('/')[1:]))
         if blob_client.exists():
@@ -108,10 +114,6 @@ def blob_trigger(myblob: func.InputStream):
     blob_client = blob_service_client.get_blob_client('csv-export', f'analysis-result-{timestamp}.csv')
     blob_client.upload_blob(df.to_csv(index=False), overwrite=True)
     
-    # Get blob metadata to extract email
-    blob_client = blob_service_client.get_blob_client('csv-import', ''.join(myblob.name.split('/')[1:]))
-    blob_properties = blob_client.get_blob_properties()
-    receiver_email = blob_properties.metadata.get('email', 'noureddine.bensadok1@gmail.com')
     send_notification(len(anomalies), receiver_email)
     logging.info('Analysis completed, results stored, and notification sent.')
 

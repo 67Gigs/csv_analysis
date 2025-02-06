@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from azure.storage.blob import BlobServiceClient
 import os
 from dotenv import load_dotenv
+from pymongo import MongoClient
 
 load_dotenv()
 
@@ -54,3 +55,24 @@ def upload_csv():
         return jsonify({
             'error': f'Erreur lors de l\'upload : {str(e)}',
         }), 500
+
+@csv_routes.route('/get-analysis', methods=['GET'])
+def get_analysis():
+    try:
+        connection_string = os.getenv('MONGODB_CONNECTION_STRING')
+        client = MongoClient(connection_string)
+
+        db = client['csvdata']
+        collection = db['csvdata']
+
+        analyses = list(collection.find().sort('timestamp', -1).limit(10))
+
+        for analysis in analyses:
+            analysis['_id'] = str(analysis['_id'])
+
+        client.close()
+
+        return jsonify(analyses), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

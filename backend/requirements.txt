@@ -2,3 +2,5 @@ flask
 flask-cors
 azure-storage-blob
 python-dotenv
+pymongo
+uvicorn

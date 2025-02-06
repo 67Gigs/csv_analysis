@@ -43,6 +43,7 @@ def upload_csv():
         return jsonify({
             'message': 'Fichier CSV uploadé avec succès',
             'filename': file.filename,
+            'email': email,
             'container': container_name
         }), 200
 

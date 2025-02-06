@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from backend.routes import csv_routes
+from routes import csv_routes
 
 
 def create_app():

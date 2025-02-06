@@ -37,8 +37,11 @@ def upload_csv():
         blob_name = f"{file.filename}"
         blob_client = container_client.get_blob_client(blob_name)
 
-        blob_client.upload_blob(file.read(), overwrite=True)
-
+        blob_client.upload_blob(
+            file.read(),
+            overwrite=True,
+            metadata={'user_email': email}
+        )
 
         return jsonify({
             'message': 'Fichier CSV uploadé avec succès',

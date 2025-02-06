@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Navigation } from './components/Navigation.tsx';
-import { Home } from './pages/Home.tsx';
-import { History } from './pages/History.tsx';
-import { FileAnalysisResult } from './types/types.ts';
+import { Navigation } from './components/Navigation';
+import { Home } from './pages/Home';
+import { History } from './pages/History';
+import { FileAnalysisResult } from './types/types';
 import { styles } from './styles.ts';
 
 const App: React.FC = () => {

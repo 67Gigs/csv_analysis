@@ -99,7 +99,7 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, showA
                 <p style={styles.statValue}>
                   {result.anomalies.length} anomalie{result.anomalies.length > 1 ? 's' : ''} détectée{result.anomalies.length > 1 ? 's' : ''} 
                   dont {result.anomalies.filter(anomaly => anomaly.type === 'prix').length} sur les prix, 
-                  {result.anomalies.filter(anomaly => anomaly.type === 'quantite').length} sur les quantités 
+                   {result.anomalies.filter(anomaly => anomaly.type === 'quantité').length} sur les quantités 
                   et {result.anomalies.filter(anomaly => anomaly.type === 'note_client').length} sur les notes client,
                   le nombre de ligne qui contiennent des anomalies est de {result.anomalies.map(anomaly => anomaly.rowId).filter((value, index, self) => self.indexOf(value) === index).length}
                 </p>

@@ -1,18 +1,103 @@
-from flask import Flask
-from flask_cors import CORS
-from routes import csv_routes
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from azure.storage.blob import BlobServiceClient
+from pymongo import MongoClient
+from typing import List
+import os
+from dotenv import load_dotenv
+from pydantic import BaseModel
 
+load_dotenv()
 
-def create_app():
-    app = Flask(__name__)
+class UploadResponse(BaseModel):
+    message: str
+    filename: str
+    email: str
+    container: str
 
-    CORS(app)
+app = FastAPI()
 
-    app.register_blueprint(csv_routes, url_prefix='/api')
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-    return app
+@app.post("/api/upload-csv")
+async def upload_csv(file: UploadFile = File(...), email: str = Form(...)):
+    if not file.filename.lower().endswith('.csv'):
+        raise HTTPException(status_code=400, detail="Seuls les fichiers CSV sont autorisés")
 
+    try:
+        connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+        container_name = os.getenv('CONTAINER_NAME', 'csv-import')
 
-if __name__ == '__main__':
-    app = create_app()
-    app.run(debug=True)
+        if not connect_str:
+            raise HTTPException(status_code=500, detail="La configuration Azure Blob Storage est manquante")
+
+        blob_service_client = BlobServiceClient.from_connection_string(connect_str)
+        container_client = blob_service_client.get_container_client(container_name)
+
+        if not container_client.exists():
+            container_client.create_container()
+
+        blob_name = file.filename
+        blob_client = container_client.get_blob_client(blob_name)
+
+        contents = await file.read()
+        blob_client.upload_blob(contents, overwrite=True, metadata={'user_email': email})
+
+        return UploadResponse(
+            message="Fichier CSV uploadé avec succès",
+            filename=file.filename,
+            email=email,
+            container=container_name
+        )
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur lors de l'upload : {str(e)}")
+
+@app.get("/api/get-analysis")
+async def get_analysis():
+    try:
+        connection_string = os.getenv('MONGODB_CONNECTION_STRING')
+        client = MongoClient(connection_string)
+
+        db = client['csvdata']
+        collection = db['csvdata']
+
+        analyses = list(collection.find().sort('timestamp', -1).limit(10))
+        for analysis in analyses:
+            analysis['_id'] = str(analysis['_id'])
+
+        client.close()
+        return analyses
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/latest-analysis")
+async def get_latest():
+    try:
+        connection_string = os.getenv('MONGODB_CONNECTION_STRING')
+        client = MongoClient(connection_string)
+
+        db = client['csvdata']
+        collection = db['csvdata']
+
+        latest = collection.find_one(sort=[('timestamp', -1)])
+        if latest:
+            latest['_id'] = str(latest['_id'])
+            client.close()
+            return latest
+        raise HTTPException(status_code=404, detail="No analysis found")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)

@@ -52,3 +52,16 @@ export const getAnalysisResults = async (): Promise<AnalysisResponse> => {
 
   return await response.json();
 };
+
+export const getAllAnalysisResults = async (): Promise<AnalysisResponse[]> => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
+  const response = await fetch(`${API_BASE_URL}/get-analysis`);
+  
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.detail || 'Une erreur est survenue');
+  }
+
+  return await response.json();
+};

@@ -59,7 +59,7 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, showA
 
   return (
     <div>
-      {!showAll && <h2 style={styles.sectionTitle}>Résultats d'analyse récents</h2>}
+      {!showAll && <h2 style={styles.sectionTitle}>Résultats d'analyse</h2>}
       {displayResults.map((result) => (
         <div key={result.id} style={styles.resultCard}>
         <h3 style={styles.resultTitle}>

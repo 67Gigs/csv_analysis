@@ -1,16 +1,15 @@
 import React from 'react';
-import { AnalysisResults } from '../components/AnalysisResults.tsx';
-import { FileAnalysisResult } from '../types/types.ts';
+import AnalysisHistory from '../components/AnalysisHistory.tsx';
 
-interface HistoryProps {
-  results: FileAnalysisResult[];
-}
-
-export const History: React.FC<HistoryProps> = ({ results }) => {
+const History = () => {
   return (
-    <div>
-      <h1>Analysis History</h1>
-      <AnalysisResults results={results} showAll />
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-8 text-gray-900">
+        Historique des Analyses
+      </h1>
+      <AnalysisHistory />
     </div>
   );
 };
+
+export default History;
